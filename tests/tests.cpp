@@ -25,6 +25,7 @@ static void testTicTacToe() {
     CHECK(winner(board("XXX OO   ")) == 'X');
     CHECK(winner(board("O  O  O  ")) == 'O');
     CHECK(winner(board("X   X   X")) == 'X');
+    CHECK(winner(board("  X X X  ")) == 'X');
     CHECK(winner(board("XOXOXOOXO")) == ' ');
     CHECK(isFull(board("XOXOXOOXO")));
     CHECK(computerMove(board("OO XX    "), 'O', 'X') == 2);  // takes the win

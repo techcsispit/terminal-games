@@ -46,6 +46,13 @@ static void test2048() {
     CHECK(game.grid()[0][3] == 4);
     CHECK(!game.hasWon());
 
+    Game2048 noOpGame(42);
+    noOpGame.setGrid({Row{2, 0, 0, 0}, Row{4, 0, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}});
+    auto beforeNoOp = noOpGame.grid();
+    CHECK(!noOpGame.move(Direction::Left));
+    CHECK(noOpGame.grid() == beforeNoOp);
+    CHECK(noOpGame.score() == 0);
+
     game.setGrid({Row{2, 4, 2, 4}, Row{4, 2, 4, 2}, Row{2, 4, 2, 4}, Row{4, 2, 4, 2}});
     CHECK(!game.canMove());
 }

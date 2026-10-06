@@ -56,7 +56,7 @@ bool Game2048::move(Direction direction) {
             }
         }
     }
-    addRandomTile();
+    if (moved) addRandomTile();
     return moved;
 }
 

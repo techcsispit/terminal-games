@@ -10,26 +10,27 @@ Game2048::Game2048(unsigned seed) : rng_(seed) {
 }
 
 Row Game2048::slideRow(Row row, int& score) {
-    bool changed = true;
-    while (changed) {
-        changed = false;
-        // Push all tiles to the left, keeping their order.
-        Row packed{};
-        int n = 0;
-        for (int value : row)
-            if (value != 0) packed[n++] = value;
-        row = packed;
-        // Merge neighbouring equal tiles.
-        for (int i = 0; i < 3; i++) {
-            if (row[i] != 0 && row[i] == row[i + 1]) {
-                row[i] *= 2;
-                score += row[i];
-                row[i + 1] = 0;
-                changed = true;
-            }
+    // Push all non-zero tiles to the left, keeping their order.
+    Row packed{};
+    int count = 0;
+    for (int value : row) {
+        if (value != 0) packed[count++] = value;
+    }
+
+    // Merge adjacent equal tiles once per move.
+    Row result{};
+    int out = 0;
+    for (int i = 0; i < count; i++) {
+        if (i + 1 < count && packed[i] == packed[i + 1]) {
+            int merged = packed[i] * 2;
+            result[out++] = merged;
+            score += merged;
+            i++;  // Skip the second tile so it only merges once per move
+        } else {
+            result[out++] = packed[i];
         }
     }
-    return row;
+    return result;
 }
 
 bool Game2048::move(Direction direction) {

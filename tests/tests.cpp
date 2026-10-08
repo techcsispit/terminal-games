@@ -68,6 +68,18 @@ static void test2048() {
     CHECK((Game2048::slideRow({0, 0, 0, 2}, score) == Row{2, 0, 0, 0}));
     CHECK((Game2048::slideRow({2, 4, 8, 16}, score) == Row{2, 4, 8, 16}));
 
+    int score_quad = 0;
+    CHECK((Game2048::slideRow({2, 2, 2, 2}, score_quad) == Row{4, 4, 0, 0}));
+    CHECK(score_quad == 8);
+
+    int score_cascade = 0;
+    CHECK((Game2048::slideRow({4, 2, 2, 0}, score_cascade) == Row{4, 4, 0, 0}));
+    CHECK(score_cascade == 4);
+
+    int score_pairs = 0;
+    CHECK((Game2048::slideRow({2, 2, 4, 4}, score_pairs) == Row{4, 8, 0, 0}));
+    CHECK(score_pairs == 12);
+
     Game2048 game(42);
     game.setGrid({Row{2, 2, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}});
     CHECK(game.move(Direction::Right));

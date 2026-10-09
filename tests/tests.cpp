@@ -93,6 +93,35 @@ static void test2048() {
     CHECK(noOpGame.grid() == beforeNoOp);
     CHECK(noOpGame.score() == 0);
 
+    Game2048 undoGame(42);
+    std::array<Row, 4> beforeUndo{Row{2, 2, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}};
+    undoGame.setGrid(beforeUndo);
+    CHECK(undoGame.move(Direction::Right));
+    auto afterMove = undoGame.grid();
+    CHECK(undoGame.score() == 4);
+    CHECK(undoGame.undo());
+    CHECK(undoGame.grid() == beforeUndo);
+    CHECK(undoGame.score() == 0);
+    CHECK(!undoGame.undo());  // only one undo is available
+    CHECK(undoGame.move(Direction::Right));
+    CHECK(undoGame.grid() == afterMove);  // RNG state was restored too
+
+    Game2048 preservedUndoGame(42);
+    std::array<Row, 4> beforePreservedUndo{
+        Row{2, 2, 8, 16}, Row{32, 64, 128, 256},
+        Row{64, 128, 256, 512}, Row{128, 256, 512, 1024}};
+    preservedUndoGame.setGrid(beforePreservedUndo);
+    CHECK(preservedUndoGame.move(Direction::Left));
+    CHECK(!preservedUndoGame.move(Direction::Left));
+    CHECK(preservedUndoGame.undo());
+    CHECK(preservedUndoGame.grid() == beforePreservedUndo);
+    CHECK(preservedUndoGame.score() == 0);
+
+    Game2048 noUndoGame(42);
+    noUndoGame.setGrid({Row{2, 0, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}, Row{0, 0, 0, 0}});
+    CHECK(!noUndoGame.move(Direction::Left));
+    CHECK(!noUndoGame.undo());
+
     game.setGrid({Row{2, 4, 2, 4}, Row{4, 2, 4, 2}, Row{2, 4, 2, 4}, Row{4, 2, 4, 2}});
     CHECK(!game.canMove());
 }

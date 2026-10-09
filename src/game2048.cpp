@@ -34,6 +34,7 @@ Row Game2048::slideRow(Row row, int& score) {
 }
 
 bool Game2048::move(Direction direction) {
+    State stateBeforeMove{grid_, score_, rng_};
     bool moved = false;
     for (int line = 0; line < 4; line++) {
         // Read the line so that "forwards" is always towards index 0.
@@ -57,8 +58,21 @@ bool Game2048::move(Direction direction) {
             }
         }
     }
-    if (moved) addRandomTile();
+    if (moved) {
+        previousState_ = stateBeforeMove;
+        canUndo_ = true;
+        addRandomTile();
+    }
     return moved;
+}
+
+bool Game2048::undo() {
+    if (!canUndo_) return false;
+    grid_ = previousState_.grid;
+    score_ = previousState_.score;
+    rng_ = previousState_.rng;
+    canUndo_ = false;
+    return true;
 }
 
 bool Game2048::canMove() const {
@@ -103,7 +117,7 @@ void Game2048::print() const {
 
 void play2048() {
     Game2048 game;
-    std::cout << "\nJoin the tiles to get to 2048! Moves: w a s d, q to quit.\n";
+    std::cout << "\nJoin the tiles to get to 2048! Moves: w a s d, u to undo, q to quit.\n";
     while (true) {
         game.print();
         if (game.hasWon()) { std::cout << "You made 2048!\n"; return; }
@@ -116,8 +130,11 @@ void play2048() {
             case 'd': game.move(Direction::Right); break;
             case 'w': game.move(Direction::Up); break;
             case 's': game.move(Direction::Down); break;
+            case 'u':
+                if (!game.undo()) std::cout << "Nothing to undo.\n";
+                break;
             case 'q': return;
-            default: std::cout << "Use w, a, s or d.\n";
+            default: std::cout << "Use w, a, s, d or u.\n";
         }
     }
 }

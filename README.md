@@ -20,10 +20,11 @@ Run `cmake --build build` again after every change.
 Menu
 - Anything other than 1 to 4, including letters, prints an error and asks again.
 
-2048 (`w a s d` to move)
+2048 (`w a s d` to move, `u` to undo)
 - Tiles slide as far as they can. Equal tiles that meet merge, and a tile only merges once per move: `2 2 2 2` moved left is `4 4 _ _`.
 - The score goes up by the value of each merged tile.
 - A new tile appears after a move only if something actually moved.
+- Undo restores the board, score, and random state from before the most recent successful move.
 - The game ends when no move is possible.
 
 Tic-tac-toe

@@ -14,6 +14,7 @@ public:
     static Row slideRow(Row row, int& score);
 
     bool move(Direction direction);  // true if any tile moved
+    bool undo();                     // restore the state before the last successful move
     bool canMove() const;
     bool hasWon() const;             // a 2048 tile exists
     int score() const { return score_; }
@@ -22,11 +23,19 @@ public:
     void print() const;
 
 private:
+    struct State {
+        std::array<Row, 4> grid;
+        int score;
+        std::mt19937 rng;
+    };
+
     void addRandomTile();
 
     std::array<Row, 4> grid_{};
     int score_ = 0;
     std::mt19937 rng_;
+    State previousState_{};
+    bool canUndo_ = false;
 };
 
 void play2048();

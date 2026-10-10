@@ -1,7 +1,17 @@
 #include "tictactoe.h"
 
 #include <iostream>
+#include <limits>
 int dp[20000];
+
+bool readInt(std::istream& input, int& value) {
+    if (!(input >> value)) {
+        input.clear();
+        input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return false;
+    }
+    return true;
+}
 
 namespace {
 
@@ -124,7 +134,10 @@ void playTicTacToe() {
         show(board);
         int square;
         std::cout << "\nYour move (1-9): ";
-        std::cin >> square;
+        if (!readInt(std::cin, square)) {
+            std::cout << "Pick an empty square from 1 to 9.\n";
+            continue;
+        }
         if (square < 1 || square > 9 || board[square - 1] != ' ') {
             std::cout << "Pick an empty square from 1 to 9.\n";
             continue;

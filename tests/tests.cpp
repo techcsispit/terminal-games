@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "game2048.h"
@@ -136,10 +137,25 @@ static void testHangman() {
     CHECK(game.won());
 }
 
+static void testInputRecovery() {
+    std::istringstream menuInput("hello\n4\n");
+    int choice = 0;
+    CHECK(!readInt(menuInput, choice));
+    CHECK(readInt(menuInput, choice));
+    CHECK(choice == 4);
+
+    std::istringstream boardInput("abc\n1\n");
+    int square = 0;
+    CHECK(!readInt(boardInput, square));
+    CHECK(readInt(boardInput, square));
+    CHECK(square == 1);
+}
+
 int main() {
     testTicTacToe();
     test2048();
     testHangman();
+    testInputRecovery();
     if (failures == 0) std::cout << "All tests passed.\n";
     return failures == 0 ? 0 : 1;
 }

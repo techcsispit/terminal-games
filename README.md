@@ -1,6 +1,6 @@
 # terminal-games
 
-2048, tic-tac-toe against the computer, and hangman in the terminal. Written in C++17.
+2048, tic-tac-toe against the computer, hangman, and snake in the terminal. Written in C++17.
 
 ## Running it
 
@@ -18,7 +18,7 @@ Run `cmake --build build` again after every change.
 ## How it's supposed to work
 
 Menu
-- Anything other than 1 to 4, including letters, prints an error and asks again.
+- Anything other than 1 to 5, including letters, prints an error and asks again.
 
 2048 (`w a s d` to move, `u` to undo)
 - Tiles slide as far as they can. Equal tiles that meet merge, and a tile only merges once per move: `2 2 2 2` moved left is `4 4 _ _`.
@@ -35,10 +35,16 @@ Hangman
 - Upper and lower case letters count as the same guess.
 - A wrong guess costs a life, repeating a guess costs nothing. You get 6 lives.
 
+Snake (arrow keys or `w a s d` to steer, `q` to quit)
+- Control the snake to eat food (`*`) and grow. Each food eaten adds 10 to the score.
+- Steer with the arrow keys or `w` (up), `a` (left), `s` (down), `d` (right).
+- The snake wraps around all boundaries (passing through one side brings you out the opposite side).
+- The game ends if the snake runs into its own body.
+
 ## Code
 
 - `src/main.cpp`: the menu
-- `src/game2048.*`, `src/tictactoe.*`, `src/hangman.*`: the games
+- `src/game2048.*`, `src/tictactoe.*`, `src/hangman.*`, `src/snake.*`: the games
 - `tests/tests.cpp`: tests, using a small `CHECK` macro
 
 ## Contributing

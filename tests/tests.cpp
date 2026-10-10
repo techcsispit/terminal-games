@@ -3,6 +3,7 @@
 
 #include "game2048.h"
 #include "hangman.h"
+#include "snake.h"
 #include "tictactoe.h"
 
 static int failures = 0;
@@ -136,10 +137,90 @@ static void testHangman() {
     CHECK(game.won());
 }
 
+static void testSnake() {
+    SnakeGame game(42);
+    CHECK(!game.isGameOver());
+    CHECK(!game.hasWon());
+    CHECK(game.score() == 0);
+    CHECK(game.body().size() == 3);
+
+    // Initial movement (default direction is Right)
+    Point initialHead = game.body().front();
+    CHECK(game.step());
+    CHECK(game.body().front().x == initialHead.x + 1);
+    CHECK(game.body().front().y == initialHead.y);
+    CHECK(game.body().size() == 3);
+
+    // Disallow reversing into itself
+    game.setDirection(SnakeDirection::Left);
+    CHECK(game.direction() == SnakeDirection::Right);
+
+    // Turn Down
+    game.setDirection(SnakeDirection::Down);
+    CHECK(game.direction() == SnakeDirection::Down);
+    CHECK(game.step());
+    CHECK(game.body().front().y == initialHead.y + 1);
+
+    // Test eating food and growing
+    SnakeGame foodGame(42);
+    Point foodHead = foodGame.body().front();
+    foodGame.setFood({foodHead.x + 1, foodHead.y});
+    CHECK(foodGame.step());
+    CHECK(foodGame.score() == 10);
+    CHECK(foodGame.body().size() == 4);
+    CHECK((foodGame.body().front() == Point{foodHead.x + 1, foodHead.y}));
+
+    // Test boundary wrap-around in all 4 directions
+    // Right -> Left
+    SnakeGame wrapRight(42);
+    wrapRight.setBody({{SnakeGame::WIDTH - 2, 5}, {SnakeGame::WIDTH - 3, 5}, {SnakeGame::WIDTH - 4, 5}});
+    wrapRight.setDirection(SnakeDirection::Right);
+    CHECK(wrapRight.step());
+    CHECK(wrapRight.body().front().x == 1);
+    CHECK(!wrapRight.isGameOver());
+
+    // Left -> Right
+    SnakeGame wrapLeft(42);
+    wrapLeft.setDirection(SnakeDirection::Up);
+    wrapLeft.setBody({{1, 5}, {2, 5}, {3, 5}});
+    wrapLeft.setDirection(SnakeDirection::Left);
+    CHECK(wrapLeft.step());
+    CHECK(wrapLeft.body().front().x == SnakeGame::WIDTH - 2);
+    CHECK(!wrapLeft.isGameOver());
+
+    // Up -> Bottom
+    SnakeGame wrapUp(42);
+    wrapUp.setDirection(SnakeDirection::Up);
+    wrapUp.setBody({{5, 1}, {5, 2}, {5, 3}});
+    CHECK(wrapUp.step());
+    CHECK(wrapUp.body().front().y == SnakeGame::HEIGHT - 2);
+    CHECK(!wrapUp.isGameOver());
+
+    // Down -> Top
+    SnakeGame wrapDown(42);
+    wrapDown.setDirection(SnakeDirection::Down);
+    wrapDown.setBody({{5, SnakeGame::HEIGHT - 2}, {5, SnakeGame::HEIGHT - 3}, {5, SnakeGame::HEIGHT - 4}});
+    CHECK(wrapDown.step());
+    CHECK(wrapDown.body().front().y == 1);
+    CHECK(!wrapDown.isGameOver());
+
+    // Test self-collision
+    SnakeGame selfGame(42);
+    selfGame.setDirection(SnakeDirection::Up);
+    std::deque<Point> selfBody = {
+        {5, 5}, {5, 6}, {4, 6}, {4, 5}, {4, 4}
+    };
+    selfGame.setBody(selfBody);
+    selfGame.setDirection(SnakeDirection::Left);
+    CHECK(!selfGame.step());
+    CHECK(selfGame.isGameOver());
+}
+
 int main() {
     testTicTacToe();
     test2048();
     testHangman();
+    testSnake();
     if (failures == 0) std::cout << "All tests passed.\n";
     return failures == 0 ? 0 : 1;
 }

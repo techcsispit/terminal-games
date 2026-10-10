@@ -13,7 +13,10 @@ int main() {
                   << "4. Quit\n"
                   << "Pick a game: ";
         int choice = 0;
-        std::cin >> choice;
+        if (!readInt(std::cin, choice)) {
+            std::cout << "Please pick 1, 2, 3 or 4.\n";
+            continue;
+        }
         switch (choice) {
             case 1: play2048(); break;
             case 2: playTicTacToe(); break;

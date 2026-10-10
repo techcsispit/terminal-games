@@ -1,3 +1,4 @@
+#include <cctype>
 #include <iostream>
 #include <string>
 
@@ -134,6 +135,25 @@ static void testHangman() {
     CHECK(game.masked() == "g _ _ _ _ _");
     for (char c : std::string("ithub")) game.guess(c);
     CHECK(game.won());
+
+    Hangman repeated("banana");
+    CHECK(!repeated.guess('x'));
+    CHECK(repeated.wrongGuesses() == 1);
+    CHECK(!repeated.guess('x'));
+    CHECK(repeated.wrongGuesses() == 1);
+    CHECK(repeated.guess('b'));
+    CHECK(repeated.guess('b'));
+
+    Hangman lives("python");
+    for (char c : std::string("abcdef")) {
+        CHECK(!lives.guess(c));
+    }
+    CHECK(lives.lost());
+
+    Hangman caseInsensitive("github");
+    CHECK(caseInsensitive.guess(std::tolower('G')));
+    CHECK(caseInsensitive.guess(std::tolower('G')));
+    CHECK(caseInsensitive.masked() == "g _ _ _ _ _");
 }
 
 int main() {

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include "game2048.h"
@@ -136,10 +137,57 @@ static void testHangman() {
     CHECK(game.won());
 }
 
+static void testHangmanLives() {
+    Hangman game("github");
+    for (char c : std::string("zqxwv")) CHECK(!game.guess(c));
+    CHECK(game.wrongGuesses() == 5);
+    CHECK(!game.lost());  // five wrong guesses leave one life
+    CHECK(!game.guess('y'));
+    CHECK(game.wrongGuesses() == 6);
+    CHECK(game.lost());  // the sixth wrong guess uses the last life
+}
+
+static void testHangmanRepeats() {
+    Hangman game("github");
+    CHECK(!game.guess('z'));
+    CHECK(!game.guess('z'));  // repeated wrong guess costs nothing
+    CHECK(game.wrongGuesses() == 1);
+    CHECK(game.guess('g'));
+    CHECK(game.guess('g'));  // repeated right guess is still a hit
+    CHECK(game.wrongGuesses() == 1);
+    CHECK(game.masked() == "g _ _ _ _ _");
+    for (int i = 0; i < 10; i++) game.guess('z');
+    CHECK(game.wrongGuesses() == 1);
+    CHECK(!game.lost());
+}
+
+// The lowercasing lives in playHangman's input loop, so drive the loop with a
+// scripted stdin. No word contains z, so Z is a wrong guess and the z after it
+// is the same guess again: the lives shown must stay at 5. The alphabet at the
+// end guarantees the game finishes whichever word was picked.
+static void testHangmanCase() {
+    std::istringstream in("Z z ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    std::ostringstream out;
+    std::streambuf* oldIn = std::cin.rdbuf(in.rdbuf());
+    std::streambuf* oldOut = std::cout.rdbuf(out.rdbuf());
+    playHangman();
+    std::cin.rdbuf(oldIn);
+    std::cout.rdbuf(oldOut);
+
+    const std::string shown = out.str();
+    const std::string fiveLives = "lives left: 5";
+    size_t first = shown.find(fiveLives);
+    CHECK(first != std::string::npos);
+    CHECK(first != std::string::npos && shown.find(fiveLives, first + 1) != std::string::npos);
+}
+
 int main() {
     testTicTacToe();
     test2048();
     testHangman();
+    testHangmanLives();
+    testHangmanRepeats();
+    testHangmanCase();
     if (failures == 0) std::cout << "All tests passed.\n";
     return failures == 0 ? 0 : 1;
 }

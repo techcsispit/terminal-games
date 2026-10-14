@@ -29,7 +29,7 @@ Menu
 
 Tic-tac-toe
 - Three in a row wins: rows, columns, and both diagonals.
-- The computer wins if it can, otherwise blocks you, otherwise takes the centre, then a corner.
+- The computer wins if it can, otherwise blocks you, otherwise takes the centre, then a corner. If every free corner would lose to a fork, it plays an edge instead.
 
 Hangman
 - Upper and lower case letters count as the same guess.

@@ -6,6 +6,7 @@
 #include "game2048.h"
 #include "hangman.h"
 #include "snake.h"
+#include "tetris.h"
 #include "tictactoe.h"
 
 int main() {
@@ -17,7 +18,8 @@ int main() {
                   << "4. Snake\n"
                   << "5. Dinosaur Run\n"
                   << "6. Blackjack\n"
-                  << "7. Quit\n"
+                  << "7. Tetris\n"
+                  << "8. Quit\n"
                   << "Pick a game: ";
         int choice = 0;
 
@@ -40,8 +42,9 @@ int main() {
             case 4: playSnake(); break;
             case 5: playDino(); break;
             case 6: playBlackjack(); break;
-            case 7: std::cout << "Bye!\n"; return 0;
-            default: std::cout << "Please pick 1, 2, 3, 4, 5, 6 or 7.\n";
+            case 7: playTetris(); break;
+            case 8: std::cout << "Bye!\n"; return 0;
+            default: std::cout << "Please pick 1, 2, 3, 4, 5, 6, 7 or 8.\n";
         }
     }
 }

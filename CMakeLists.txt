@@ -4,7 +4,7 @@ project(terminal_games CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(games_lib src/tictactoe.cpp src/game2048.cpp src/hangman.cpp src/snake.cpp src/dino.cpp src/blackjack.cpp)
+add_library(games_lib src/tictactoe.cpp src/game2048.cpp src/hangman.cpp src/minesweeper.cpp src/snake.cpp src/dino.cpp src/blackjack.cpp)
 target_include_directories(games_lib PUBLIC src)
 
 add_executable(games src/main.cpp)
@@ -15,3 +15,6 @@ target_link_libraries(tests games_lib)
 
 enable_testing()
 add_test(NAME tests COMMAND tests)
+add_executable(tests_minesweeper tests/tests_minesweeper.cpp)
+target_link_libraries(tests_minesweeper games_lib)
+add_test(NAME minesweeper_tests COMMAND tests_minesweeper)

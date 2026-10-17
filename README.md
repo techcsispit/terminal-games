@@ -1,6 +1,6 @@
 # terminal-games
 
-2048, tic-tac-toe against the computer, hangman, Snake, Blackjack, and a dinosaur run in the terminal. Written in C++17.
+2048, tic-tac-toe against the computer, hangman, Snake, Minesweeper, Blackjack, and a dinosaur run in the terminal. Written in C++17.
 
 ## Running it
 
@@ -53,6 +53,13 @@ Blackjack
 - Hover over and click Hit, Stand, or Double Down; press `H`, `S`, or `D` as a keyboard alternative. Double Down is available on the first two cards when you can match the wager. The dealer hits through 16 and stands on all 17s.
 - A natural Blackjack pays 3:2; a regular win pays 1:1, and a tie returns the wager.
 - Press `q` at the wager prompt or after a round to return to the menu.
+
+
+Minesweeper (board: 9x9, 10 mines)
+- Clear all non-mine cells to win. Revealing a mine loses.
+- Commands: `r row col` (reveal), `f row col` (flag/unflag), `q` (quit). Coordinates are 1-9 (1,1 = top-left).
+- First reveal is always safe; if it lands on a mine, the mine is moved.
+- Revealing a zero-adjacent cell performs flood fill through safe neighbors.
 
 ## Code
 

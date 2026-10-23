@@ -808,13 +808,13 @@ static void testPagination() {
     CHECK(Borderland::getPageCount(16) == 2);
     CHECK(Borderland::getPageCount(17) == 3);
 
-    // 2. Single-page menu rendering should not show page toggle prompt and count Quit dynamically from registry
+    // 2. Registry menu rendering should show pagination when more than 8 games are registered
     const auto& defaultTrials = Borderland::getGameTrials();
     const int quitOption = static_cast<int>(defaultTrials.size()) + 1;
     std::ostringstream defaultOut;
     Borderland::printMenu(defaultTrials, 0, defaultOut);
     std::string defaultStr = defaultOut.str();
-    CHECK(defaultStr.find("Enter 0 to toggle page") == std::string::npos);
+    CHECK(defaultStr.find("Enter 0 to toggle page") != std::string::npos);
     CHECK(defaultStr.find("[" + std::to_string(quitOption) + "] ") != std::string::npos);
     CHECK(defaultStr.find("Pick a trial card (1-" + std::to_string(quitOption) + "):") != std::string::npos);
 

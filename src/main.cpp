@@ -1,6 +1,5 @@
 #include <iostream>
 #include <limits>
-#include <string>
 
 #include "intro.h"
 
@@ -19,6 +18,7 @@ int main() {
 
         if (!(std::cin >> choice)) {
             if (std::cin.eof()) {
+                std::cout << "\nBye!\n";
                 return 0;
             }
 

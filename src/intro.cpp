@@ -11,12 +11,16 @@
 #include "dino.h"
 #include "game2048.h"
 #include "hangman.h"
+#include "minesweeper.h"
 #include "snake.h"
 #include "spaceinvaders.h"
 #include "tetris.h"
 #include "tictactoe.h"
 
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <conio.h>
 #include <io.h>
 #include <windows.h>
@@ -292,6 +296,7 @@ const std::vector<GameTrial>& getGameTrials() {
         {6, "BLACKJACK", "Blackjack",    "♥", "Tactics",  CLR_RED,  playBlackjack},
         {7, "TETRIS",    "Tetris",       "♣", "Agility",  CLR_CYAN, playTetris},
         {8, "INVADERS",  "Space Invaders", "♠", "Defense",  CLR_CYAN, playSpaceInvaders},
+        {9, "MINESWEEPER", "Minesweeper", "♣", "Logic", CLR_CYAN, playMinesweeper},
     };
     return registry;
 }

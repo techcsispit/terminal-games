@@ -1,6 +1,6 @@
 # terminal-games
 
-2048, tic-tac-toe against the computer, hangman, Snake, Blackjack, Tetris, Space Invaders, and a dinosaur run in the terminal. Written in C++17.
+2048, tic-tac-toe against the computer, hangman, Snake, Minesweeper, Blackjack, Tetris, Space Invaders, and a dinosaur run in the terminal. Written in C++17.
 
 ## Running it
 
@@ -70,6 +70,12 @@ Tetris
 - Clearing 1/2/3/4 lines scores 100/300/500/800 points, multiplied by the current level. Back-to-back Tetrises score 1.5 times the normal Tetris points. Every 10 cleared lines advances a level and speeds up gravity, from one row every 45 ticks at level 1 to every 3 ticks at level 15.
 - Pieces lock after 30 ticks (0.5 seconds) on the ground. Successful moves or rotations can reset the lock delay up to 15 times.
 - `TetrisGame` (`src/tetris.h` and `src/tetris.cpp`) contains the game rules independently of input and drawing. `playTetris()` handles POSIX raw input and rendering, and restores terminal settings when you leave. A terminal smaller than 80 columns by 24 rows displays a warning and returns to the menu.
+
+Minesweeper (board: 9x9, 10 mines)
+- Clear all non-mine cells to win. Revealing a mine loses.
+- Commands: `r row col` (reveal), `f row col` (flag/unflag), `q` (quit). Coordinates are 1-9 (1,1 = top-left).
+- First reveal is always safe; if it lands on a mine, the mine is moved.
+- Revealing a zero-adjacent cell performs flood fill through safe neighbors.
 
 ## Code
 
